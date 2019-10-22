@@ -1,3 +1,5 @@
+
+
 CotohapPy: Cotoha for Python
 =========
 
@@ -12,8 +14,7 @@ The easiest way to install the latest version is by using pip/easy_install to pu
 pip install cotohappy
 ```
 
-You may also use Git to clone the repository from
-GitHub and install it manually:
+You may also use Git to clone the repository from GitHub and install it manually:
 
 ```bash
 git clone https://github.com/278Mt/cotohappy.git
@@ -37,7 +38,7 @@ This is one of the examples.
 ```python
 import cotohappy
 
-coy = cotohappy.API()
+coy = cotohappy.API()   # created instance of CotohapPy
 
 print('\n#### parse origin ####')
 sentence = '犬は歩く。'
@@ -46,16 +47,23 @@ parse_li = coy.parse(sentence, type_)
 for parse in parse_li:
     print(parse)
 
+print(parse.key_name)
+
 print('\n#### parse tokens ####')
 for parse in parse_li:
     for token in parse.tokens:
         print(token)
+        
+print(token.key_name)
 ```
+
+Output:
 
 ```
 #### parse origin ####
 犬は	 0,1,D,0,1
 歩く。	 1,-1,O,0,1
+form     id,head,dep,chunk_head,chunk_func
 
 #### parse tokens ####
 犬	 0,イヌ,犬,名詞,*,*,*,*,*
@@ -63,6 +71,7 @@ for parse in parse_li:
 歩	 2,アル,歩く,動詞語幹,K,*,*,*,*
 く	 3,ク,く,動詞接尾辞,終止,*,*,*,*
 。	 4,,。,句点,*,*,*,*,*
+form     id,kana,lemma,pos,features[:5]
 ```
 
 

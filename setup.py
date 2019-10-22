@@ -11,21 +11,21 @@ setup(
     name='cotohappy',
     packages=['cotohappy'],
 
-    version='0.0.1',
+    version='0.0.1.2',
 
     license='MIT',
 
-    install_requires=['json', 'requests'],
+    install_requires=['requests'],
 
-    author='278Mt', # パッケージ作者の名前
-    author_email='278mt.l.meitner@gmail.com', # パッケージ作者の連絡先メールアドレス
+    author='278Mt',
+    author_email='278mt.l.meitner@gmail.com',
 
-    url='https://github.com/278mt/cotohappy', # パッケージに関連するサイトのURL(GitHubなど)
+    url='https://github.com/278mt/cotohappy',
 
-    description='Cotoha API, created by NTT Communications Corporation, for Python'
+    description='Cotoha API, created by NTT Communications Corporation, for Python',
     long_description=long_description,
-    long_description_content_type='text/markdown'
-    keywords='cotohappy CotohapPy cotoha library', # PyPIでの検索用キーワードをスペース区切りで指定
+    long_description_content_type='text/markdown',
+    keywords='cotohappy CotohapPy cotoha library',
 
     classifiers=[
         'License :: OSI Approved :: MIT License',

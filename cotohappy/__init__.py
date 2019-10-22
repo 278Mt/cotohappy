@@ -21,9 +21,9 @@ How to use the documentation
 
 """
 
-__version__ = '1.0.0'
+__version__ = '0.0.1'
 __author__  = 'Nicolas Toba Nozomi'
-__licence__ = '?MIT'
+__licence__ = 'MIT'
 
 from cotohappy.api import API
 from cotohappy.error import CotohapPyError

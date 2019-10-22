@@ -9,7 +9,6 @@ COTOHA API for Python3.8
 """
 
 import cotohappy
-from time import sleep
 
 
 if __name__ == '__main__':

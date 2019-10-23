@@ -3,7 +3,7 @@
 CotohapPy: Cotoha for Python
 =========
 
-CotohapPy (Japanese: コトハッピー) is for connecting to [Cotoha](https://api.ce-cotoha.com/contents/), one of the Japanese morphological analysis engines, and is for reshaping the response more readably.
+CotohapPy (Japanese: コトハッピー) is for connecting to [Cotoha API](https://api.ce-cotoha.com/contents/), one of the Japanese morphological analysis engines, and is for reshaping the response more readably.
 
 Installation
 ------------

@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     """ if you extract just nouns, you write: """
     print('\n#### extract nouns ####')
-    nouns = []
+    nouns: [str] = []
     for parse in parse_li:
         for token in parse.tokens:
             if token.pos == '名詞':

@@ -36,8 +36,8 @@ Usage
 This is one of the examples.
 
 ```bash
-├── example.py
-└── payload.json
+├── payload.json
+└── sjgyoen.py
 ```
 
 JSON preperation (`payload.json`):
@@ -51,7 +51,7 @@ JSON preperation (`payload.json`):
 }
 ```
 
-Programme (`example.py`)
+Programme (`sjgyoen.py`)
 
 ```python
 import cotohappy

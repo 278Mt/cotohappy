@@ -139,4 +139,4 @@ form	 id,kana,lemma,pos,features[:5]
 ['靴', '職人', '高校生', 'タカオ', '雨', '朝', '学校', '公園', '日本', '庭園', '靴', 'スケッチ', 'ある日', 'タカオ', 'ひとり', '缶', 'ビール', '年上', '女性', 'ユキノ', 'ふたり', '約束', '雨', '日', '逢瀬', '心', '居場所', 'ユキノ', '彼女', '靴', 'タカオ', '六月', '空', '揺れ', '互い', '思い', 'よそ', '梅雨']
 ```
 
-Please chek details on [examples](https://github.com/278Mt/cotohappy/tree/master/examples).
+Please check details on [examples](https://github.com/278Mt/cotohappy/tree/master/examples).

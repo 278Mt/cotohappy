@@ -1,5 +1,16 @@
 #!/usr/bin/env python3.8
 # -*- coding: utf-8 -*-
+from __future__ import(
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+    generator_stop,
+    annotations
+)
 """
 Created on Sun Oct 20 12:00:00 2019
         
@@ -21,7 +32,9 @@ How to use the documentation
 
 """
 
-__version__ = '0.0.2.1'
+
+
+__version__ = '0.0.2.4'
 __author__  = 'Nicolas Toba Nozomi'
 __licence__ = 'MIT'
 

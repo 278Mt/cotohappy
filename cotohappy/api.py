@@ -105,7 +105,7 @@ class API(object):
         return type_
 
 
-    def __get_result(self, partial_url: str, body: dict, /) -> dict:
+    def __get_result(self, partial_url: str, body: dict) -> dict:
 
         url = self.api_base_url + partial_url
         headers = {

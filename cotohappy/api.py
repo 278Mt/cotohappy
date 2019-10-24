@@ -14,7 +14,6 @@ from cotohappy.reshape import Reshape
 from cotohappy.error import CotohapPyError
 
 
-
 class API(object):
 
     def __init__(
@@ -72,6 +71,28 @@ class API(object):
         self.api_base_url = self.payload['APIBaseURL']
 
 
+    def __beta(fn):
+
+        def inr_fn(self, *arg, **kwarg):
+
+            print('This API is provided in Beta Version.')
+
+            return fn(self, *arg, **kwarg)
+
+        return inr_fn
+
+
+    def __enterprise(fn):
+
+        def inr_fn(self, *arg, **kwarg):
+
+            print('This API is for Enterprise. Please note that this API is not available for developer accounts.')
+
+            return fn(self, *arg, **kwarg)
+
+        return inr_fn
+
+
     def __get_access_token(self):
 
         url = self.payload['AccessTokenPublishURL']
@@ -120,6 +141,7 @@ class API(object):
         return response['result']
 
 
+    @__enterprise
     def __attributed_dic_type(self, dic_type: str or [str]=None) -> [str]:
 
         if type(dic_type) is str:
@@ -142,7 +164,7 @@ class API(object):
         if dic_type is None:
             for part in dic_type:
                 if part not in correct_dic_type:
-                    raise CotohapPyError(f'dic_type {part} is unusable. please choose from {correct_dic_type}')
+                    raise CotohapPyError(f'dic_type {part} is unusable. Please choose from {correct_dic_type}')
 
         return dic_type
 
@@ -209,7 +231,8 @@ class API(object):
             'sentence': sentence,
             'type'    : self.__attributed_type(type_),
         }
-        if (dic_type := self.__attributed_dic_type(dic_type)) is not None:
+        dic_type = self.__attributed_dic_type(dic_type)
+        if dic_type is not None:
             body['dic_type'] = dic_type
 
         parse_li = self.__get_result(partial_url, body)
@@ -272,7 +295,8 @@ class API(object):
             'sentence': sentence,
             'type_'    : self.__attributed_type(type_)
         }
-        if (dic_type := self.__attributed_dic_type(dic_type)) is not None:
+        dic_type = self.__attributed_dic_type(dic_type)
+        if dic_type is not None:
             body['dic_type'] = dic_type
 
         ne_li = self.__get_result(partial_url, body)
@@ -402,7 +426,8 @@ class API(object):
             'do_segment'     : do_segment,
             'max_keyword_num': max_keyword_num
         }
-        if (dic_type := self.__attributed_dic_type(dic_type)) is not None:
+        dic_type = self.__attributed_dic_type(dic_type)
+        if dic_type is not None:
             body['dic_type'] = dic_type
 
         keyword_li = self.__get_result(partial_url, body)
@@ -467,7 +492,8 @@ class API(object):
             's2'  : s2,
             'type': self.__attributed_type(type_)
         }
-        if (dic_type := self.__attributed_dic_type(dic_type)) is not None:
+        dic_type = self.__attributed_dic_type(dic_type)
+        if dic_type is not None:
             body['dic_type'] = dic_type
 
         return Reshape('similarity', self.__get_result(partial_url, body))
@@ -549,17 +575,6 @@ class API(object):
         }
 
         return Reshape('sentiment', self.__get_result(partial_url, body))
-
-
-    def __beta(fn):
-
-        def inr_fn(self, *arg, **kwarg):
-
-            print('This API is provided in Beta Version.')
-
-            return fn(self, *arg, **kwarg)
-
-        return inr_fn
 
 
     @__beta

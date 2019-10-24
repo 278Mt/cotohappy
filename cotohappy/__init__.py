@@ -32,9 +32,7 @@ How to use the documentation
 
 """
 
-
-
-__version__ = '0.0.3'
+__version__ = '0.1.0'
 __author__  = 'Nicolas Toba Nozomi'
 __licence__ = 'MIT'
 

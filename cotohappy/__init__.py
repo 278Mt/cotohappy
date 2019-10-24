@@ -34,7 +34,7 @@ How to use the documentation
 
 
 
-__version__ = ''
+__version__ = '0.0.3'
 __author__  = 'Nicolas Toba Nozomi'
 __licence__ = 'MIT'
 

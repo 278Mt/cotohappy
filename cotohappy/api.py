@@ -142,7 +142,7 @@ class API(object):
 
 
     @__enterprise
-    def __attributed_dic_type(self, dic_type: str or [str]=None) -> [str]:
+    def __attributed_dic_type(self, dic_type: str or [str]) -> [str]:
 
         if type(dic_type) is str:
             dic_type = [dic_type]
@@ -161,10 +161,9 @@ class API(object):
             'metal'
         ]
 
-        if dic_type is None:
-            for part in dic_type:
-                if part not in correct_dic_type:
-                    raise CotohapPyError(f'dic_type {part} is unusable. Please choose from {correct_dic_type}')
+        for part in dic_type:
+            if part not in correct_dic_type:
+                raise CotohapPyError(f'dic_type {part} is unusable. Please choose from {correct_dic_type}')
 
         return dic_type
 
@@ -231,9 +230,8 @@ class API(object):
             'sentence': sentence,
             'type'    : self.__attributed_type(type_),
         }
-        dic_type = self.__attributed_dic_type(dic_type)
         if dic_type is not None:
-            body['dic_type'] = dic_type
+            body['dic_type'] = self.__attributed_dic_type(dic_type)
 
         parse_li = self.__get_result(partial_url, body)
 
@@ -295,9 +293,8 @@ class API(object):
             'sentence': sentence,
             'type_'    : self.__attributed_type(type_)
         }
-        dic_type = self.__attributed_dic_type(dic_type)
         if dic_type is not None:
-            body['dic_type'] = dic_type
+            body['dic_type'] = self.__attributed_dic_type(dic_type)
 
         ne_li = self.__get_result(partial_url, body)
 
@@ -426,9 +423,8 @@ class API(object):
             'do_segment'     : do_segment,
             'max_keyword_num': max_keyword_num
         }
-        dic_type = self.__attributed_dic_type(dic_type)
         if dic_type is not None:
-            body['dic_type'] = dic_type
+            body['dic_type'] = self.__attributed_dic_type(dic_type)
 
         keyword_li = self.__get_result(partial_url, body)
 
@@ -492,9 +488,8 @@ class API(object):
             's2'  : s2,
             'type': self.__attributed_type(type_)
         }
-        dic_type = self.__attributed_dic_type(dic_type)
         if dic_type is not None:
-            body['dic_type'] = dic_type
+            body['dic_type'] = self.__attributed_dic_type(dic_type)
 
         return Reshape('similarity', self.__get_result(partial_url, body))
 
@@ -662,14 +657,6 @@ class API(object):
         すみません、ちょっと、急用が入ってしまって。     すみません、急用が入ってしまって。
         """
 
-        partial_url = 'nlp/beta/user_attribute'
-        body = {
-            'document'  : document,
-            'type'      : type_,
-            'do_segment': do_segment
-        }
-
-        return Reshape('user_attribute', self.__get_result(partial_url, body))
         partial_url = 'nlp/beta/remove_filler'
         body = {
             'text'      : text,

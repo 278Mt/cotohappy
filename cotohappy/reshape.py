@@ -26,7 +26,7 @@ class Reshape(object):
                 Reshape(mode='links', data=link)
                 for link in chunk_info['links']
             ]
-            self.predicate  = chunk_info['predicate'] if 'predicate' in data else []
+            self.predicate  = chunk_info['predicate'] if 'predicate' in chunk_info else []
 
             self.tokens     = [
                 Reshape(mode='tokens', data=token)

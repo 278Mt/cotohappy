@@ -16,42 +16,35 @@ class Reshape(object):
         self.data = data
 
         if mode == 'parse':
-            self.chunk_info = Reshape(mode='chunk_info', data=data['chunk_info'])
+            chunk_info = data['chunk_info']
+            self.id_        = chunk_info['id']
+            self.head       = chunk_info['head']
+            self.dep        = chunk_info['dep']
+            self.chunk_head = chunk_info['chunk_head']
+            self.chunk_func = chunk_info['chunk_func']
+            self.links      = [
+                Reshape(mode='links', data=link)
+                for link in chunk_info['links']
+            ]
+            self.predicate  = chunk_info['predicate'] if 'predicate' in data else []
+
             self.tokens     = [
                 Reshape(mode='tokens', data=token)
                 for token in data['tokens']
             ]
 
-            self.form = ''.join(map(lambda token: token.form, self.tokens))
-            self.key_name   = 'form\t id,head,dep,chunk_head,chunk_func'
-            self.result_str = '{}\t {},{},{},{},{}'.format(
-                self.form,
-                self.chunk_info.id_,
-                self.chunk_info.head,
-                self.chunk_info.dep,
-                self.chunk_info.chunk_head,
-                self.chunk_info.chunk_func
-            )
+            len_predicate = len(self.predicate)
 
-        elif mode == 'chunk_info':
-            self.id_        = data['id']
-            self.head       = data['head']
-            self.dep        = data['dep']
-            self.chunk_head = data['chunk_head']
-            self.chunk_func = data['chunk_func']
-            self.links      = [
-                Reshape(mode='links', data=link)
-                for link in data['links']
-            ]
-            self.predicate  = data['predicate'] if 'predicate' in data else []
-            
-            self.key_name   = 'id,head,dep,chunk_head,chunk_func'
-            self.result_str = '{},{},{},{},{}'.format(
+            self.form = ''.join(map(lambda token: token.form, self.tokens))
+            self.key_name   = 'form\t id,head,dep,chunk_head,chunk_func,predicate[:5]'
+            self.result_str = '{}\t {},{},{},{},{},{},{},{},{},{}'.format(
+                self.form,
                 self.id_,
                 self.head,
                 self.dep,
                 self.chunk_head,
                 self.chunk_func,
+                *[self.predicate[i] if len_predicate > i else '*' for i in range(5)]
             )
 
         elif mode == 'links':
@@ -86,11 +79,7 @@ class Reshape(object):
                 self.kana,
                 self.lemma,
                 self.pos,
-                self.features[0] if len_features > 0 else '*',
-                self.features[1] if len_features > 1 else '*',
-                self.features[2] if len_features > 2 else '*',
-                self.features[3] if len_features > 3 else '*',
-                self.features[4] if len_features > 4 else '*'
+                *[self.features[i] if len_features > i else '*' for i in range(5)]
             )
 
         elif mode == 'dependency_labels':
@@ -191,11 +180,7 @@ class Reshape(object):
             self.key_name   = 'modality\t dialog_act[:5]'
             self.result_str = '{}\t {},{},{},{},{}'.format(
                 self.modality,
-                self.dialog_act[0],
-                self.dialog_act[1] if len_dialog_act > 1 else '*',
-                self.dialog_act[2] if len_dialog_act > 2 else '*',
-                self.dialog_act[3] if len_dialog_act > 3 else '*',
-                self.dialog_act[4] if len_dialog_act > 4 else '*'
+                *[self.dialog_act[i] if len_dialog_act > i else '*' for i in range(5)]
             )
 
         elif mode == 'sentiment':
@@ -221,11 +206,7 @@ class Reshape(object):
             self.key_name   = 'form\t emotion[:5]'
             self.result_str = '{}\t {},{},{},{},{}'.format(
                 self.form,
-                self.emotion[0],  # required
-                self.emotion[1] if len_emotion > 1 else '*',
-                self.emotion[2] if len_emotion > 2 else '*',
-                self.emotion[3] if len_emotion > 3 else '*',
-                self.emotion[4] if len_emotion > 4 else '*'
+                *[self.emotion[i] if len_emotion > i else '*' for i in range(5)]
             )
 
         elif mode == 'user_attribute':
@@ -257,15 +238,9 @@ class Reshape(object):
                 self.location,
                 self.occupation,
                 self.position,
-                self.habit[0]  if len_habit  > 0 else '*',
-                self.habit[1]  if len_habit  > 1 else '*',
-                self.hobby[0]  if len_hobby  > 0 else '*',
-                self.hobby[1]  if len_hobby  > 1 else '*',
-                self.hobby[2]  if len_hobby  > 3 else '*',
-                self.hobby[3]  if len_hobby  > 4 else '*',
-                self.hobby[4]  if len_hobby  > 5 else '*',
-                self.moving[0] if len_moving > 0 else '*',
-                self.moving[1] if len_moving > 1 else '*',
+                *[self.habit[i]  if len_habit  > i else '*' for i in range(2)],
+                *[self.hobby[i]  if len_hobby  > i else '*' for i in range(5)],
+                *[self.moving[i] if len_moving > i else '*' for i in range(2)]
             )
 
         elif mode == 'remove_filler':
@@ -325,11 +300,7 @@ class Reshape(object):
                 self.begin_pos,
                 self.end_pos,
                 self.detect_score,
-                self.correction[0].form,  # required
-                self.correction[1].form if len_correction > 1 else '*',
-                self.correction[2].form if len_correction > 2 else '*',
-                self.correction[3].form if len_correction > 3 else '*',
-                self.correction[4].form if len_correction > 4 else '*'
+                *[self.correction[i].form if len_correction > i else '*' for i in range(5)]
             )
 
         elif mode == 'correction':

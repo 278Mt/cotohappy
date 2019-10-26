@@ -16,7 +16,7 @@ class Translate(object):
         pass
 
 
-    def dep_list(self, key):
+    def dep_list(self, key: str) -> str:
 
         dic = {
             'O': '掛かり先なし',
@@ -30,7 +30,7 @@ class Translate(object):
         return dic[key] if key in dic else key
 
 
-    def predicate_list(self, key):
+    def predicate_list(self, key: str) -> str:
 
         dic = {
             'negative': '否定',
@@ -41,7 +41,7 @@ class Translate(object):
         return dic[key] if key in dic else key
 
 
-    def speech_parts_list(self, key):
+    def speech_parts_list(self, key: str) -> str:
 
         dic = {
             'Symbol': '記号の形態素',
@@ -51,7 +51,7 @@ class Translate(object):
         return dic[key] if key in dic else key
 
 
-    def features_list(self, key0, key1):
+    def features_list(self, key0: str, key1: str) -> str:
 
         dic = {
             '動詞語幹': {
@@ -83,7 +83,7 @@ class Translate(object):
         return dic[key0][key1] if key0 in dic and key1 in dic[key0] else key1
 
 
-    def semantic_role_label_list(self, key):
+    def semantic_role_label_list(self, key: str) -> str:
 
         dic = {
             'agent'            : '有意動作を引き起こす主体',
@@ -115,12 +115,12 @@ class Translate(object):
         return dic[key] if key in dic else key
 
 
-    def dependency_label_list(self, key):
+    def dependency_label_list(self, key: str):
 
         pass
 
 
-    def ne_class_list(self, key):
+    def ne_class_list(self, key: str) -> str:
 
         dic = {
             'ORG': '組織名',
@@ -138,7 +138,7 @@ class Translate(object):
         return dic[key] if key in dic else key
 
 
-    def extended_ne_class_list(self, key):
+    def extended_ne_class_list(self, key: str) -> str:
 
         dic = {
             'Name'                        : '名前',
@@ -389,7 +389,7 @@ class Translate(object):
         return dic[key] if key in dic else key
 
 
-    def speech_act_list(self, key):
+    def speech_act_list(self, key: str) -> str:
 
         dic = {
             'greeting'             : '挨拶',

@@ -84,7 +84,7 @@ class Reshape(object):
             # translate
             if translate:
                 self.pos      = tl.speech_parts_list(self.pos)
-                self.features = [tl.features_list(feature) for feature in self.features]
+                self.features = [tl.features_list(self.pos, feature) for feature in self.features]
 
             len_features = len(self.features)
 

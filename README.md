@@ -148,6 +148,14 @@ Please check details on [examples](https://github.com/278Mt/cotohappy/tree/maste
 Whats's new?
 ------------
 
+### 0.3.6
+
+Partial errors elimination.
+
+### 0.3.5
+
 In version 0.3.5, you can choose translating mode: for example, "information-seeking" in sentence type, to "情報獲得".
+
+### 0.3.4
 
 In version 0.3.4, you can use technical term dictionaries on parse, named entity extraction, keyword extraction and similarity calculation. However, I, origin master of CotohapPy, cannot use nor examine the mode because I use Cotoha API for Developer, not for Enterprise. I want for Academic.

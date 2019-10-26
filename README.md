@@ -3,6 +3,10 @@
 CotohapPy: Cotoha for Python
 =========
 
+[![Downloads](https://pepy.tech/badge/cotohappy)](https://pepy.tech/project/cotohappy)
+[![Downloads](https://pepy.tech/badge/cotohappy/month)](https://pepy.tech/project/cotohappy/month)
+[![Downloads](https://pepy.tech/badge/cotohappy/week)](https://pepy.tech/project/cotohappy/week)
+
 CotohapPy (Japanese: コトハッピー) is for connecting to [Cotoha API](https://api.ce-cotoha.com/contents/), one of the Japanese morphological analysis engines, and is for reshaping the response more readably.
 
 Installation
@@ -140,3 +144,10 @@ form	 id,kana,lemma,pos,features[:5]
 ```
 
 Please check details on [examples](https://github.com/278Mt/cotohappy/tree/master/examples).
+
+Whats's new?
+------------
+
+In version 0.3.5, you can choose translating mode: for example, "information-seeking" in sentence type, to "情報獲得".
+
+In version 0.3.4, you can use technical term dictionaries on parse, named entity extraction, keyword extraction and similarity calculation. However, I, origin master of CotohapPy, cannot use nor examine the mode because I use Cotoha API for Developer, not for Enterprise. I want for Academic.

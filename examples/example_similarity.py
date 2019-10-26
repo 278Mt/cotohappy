@@ -15,8 +15,8 @@ if __name__ == '__main__':
 
     coy = cotohappy.API()
 
-    s1    = '近くのレストランはどこですか？'
-    s2    = 'このあたりの定食屋はどこにありますか？'
-    type_ = 'default'
-    similarity = coy.similarity(s1, s2, type_)
+    s1     = '近くのレストランはどこですか？'
+    s2     = 'このあたりの定食屋はどこにありますか？'
+    kuzure = False
+    similarity = coy.similarity(s1, s2, kuzure)
     print(similarity)

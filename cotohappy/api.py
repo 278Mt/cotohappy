@@ -22,7 +22,8 @@ class API(object):
         api_base_url            : str=None,
         client_id               : str=None,
         client_secret           : str=None,
-        payload_fname           : str='payload.json'
+        payload_fname           : str='payload.json',
+        translate               : bool=False
     ):
 
         """
@@ -38,6 +39,8 @@ class API(object):
             Client secret. Specify your client secret on the account page (default: None)
         payload_fname            : str
             payload json filename (default: 'payload.json')
+        translate                : bool
+            translating result readablly for Japanese (default: False)
 
         Notes
         -----
@@ -115,12 +118,12 @@ class API(object):
         self.issued_at = int(response['issued_at'])
 
 
-    def __attributed_type(self, type_: str='default') -> str:
+    def __attributed_type(self, kuzure: bool=False) -> str:
 
-        if type_ not in ['default', 'kuzure']:
-            raise CotohapPyError(f'type_ must be "default" or "kuzure", not "{type_}"')
-
-        return type_
+        if kuzure:
+            return 'kuzure'
+        else:
+            return 'default'
 
 
     def __get_result(self, partial_url: str, body: dict) -> dict:
@@ -168,17 +171,17 @@ class API(object):
         return dic_type
 
 
-    def parse(self, sentence: str, type_: str='default', dic_type: str or [str]=None, translate: bool=False) -> [Reshape]:
+    def parse(self, sentence: str, kuzure: bool=False, dic_type: str or [str]=None, translate: bool=None) -> [Reshape]:
 
         """
         Parameters
         ----------
         sentence  : str
             sentence to be analyzed
-        type_     : str
-            You can choose one from the following (default: 'default')
-            * 'default' - normal sentence
-            * 'kuzure'  - Sentence contains 'word lengthening' often found in SNSs
+        kuzure    : bool
+            You can choose one from the following (default: False)
+            * False - default sentence
+            * True  - sentence includs word lengthening often found in SNSs
         dic_type  : str or [str]
             Specify technical term dictionaries. Choose from ther below.(only for Enterprise user) That's too bad. I'm an university student. I want for academic.
             * 'IT'           - Computer,information,communication
@@ -193,7 +196,7 @@ class API(object):
             * 'medical'      - Medical
             * 'metal'        - Metal
         translate : bool
-            translating result readablly for Japanese
+            translating result readablly for Japanese (default: self.translate)
 
         See Also
         --------
@@ -209,8 +212,8 @@ class API(object):
         >>> import cotohappy
         >>> coy = cotohappy()
         >>> sentence = '犬は歩く。'
-        >>> type_    = 'default'
-        >>> parse_li = coy.parse(sentence, type_)
+        >>> kuzure   = 'default'
+        >>> parse_li = coy.parse(sentence, kuzure)
         >>> for parse in parse_li:
         ...     parse
         ...     # form   id,head,dep,chunk_head,chunk_func
@@ -227,10 +230,13 @@ class API(object):
         。   4,,。,句点,*,*,*,*,*
         """
 
+        if translate is None:
+            translate = self.translate
+
         partial_url = 'nlp/v1/parse'
         body = {
             'sentence': sentence,
-            'type'    : self.__attributed_type(type_),
+            'type'    : self.__attributed_type(kuzure),
         }
         if dic_type is not None:
             body['dic_type'] = self.__attributed_dic_type(dic_type)
@@ -243,17 +249,17 @@ class API(object):
         ]
 
 
-    def ne(self, sentence: str, type_: str='default', dic_type: str or [str]=None, translate: bool=False) -> [Reshape]:
+    def ne(self, sentence: str, kuzure: bool=False, dic_type: str or [str]=None, translate: bool=False) -> [Reshape]:
 
         """
         Parameters
         ----------
         sentence  : str
             Sentence to be analyzed
-        type_     : str
-            You can choose one from the following (default: 'default')
-            * 'default' - Normal sentence
-            * 'kuzure'  - sentence contains word lengthening often found in SNSs
+        kuzure    : bool
+            You can choose one from the following (default: False)
+            * False - default sentence
+            * True  - sentence includs word lengthening often found in SNSs
         dic_type  : str or [str]
             Specify technical term dictionaries. Choose from ther below.(only for Enterprise user) That's too bad. I'm an university student. I want for academic.
             * 'IT'           - Computer,information,communication
@@ -283,8 +289,8 @@ class API(object):
         >>> import cotohappy
         >>> coy = cotohappy()
         >>> sentence = '昨日は東京駅を利用した。'
-        >>> type_    = 'default'
-        >>> ne_li = coy.ne(sentence, type_)
+        >>> kuzure   = False
+        >>> ne_li = coy.ne(sentence, kuzure)
         >>> for ne in ne_li:
         ...     ne
         ...     # form   begin_pos,end_pos,std_form,class,extended_class,info,source
@@ -292,10 +298,13 @@ class API(object):
         東京駅 3,6,東京駅,LOC,*,*,basic
         """
 
+        if translate is None:
+            translate = self.translate
+
         partial_url = 'nlp/v1/ne'
         body = {
             'sentence': sentence,
-            'type_'    : self.__attributed_type(type_)
+            'type'    : self.__attributed_type(kuzure)
         }
         if dic_type is not None:
             body['dic_type'] = self.__attributed_dic_type(dic_type)
@@ -308,7 +317,7 @@ class API(object):
         ]
 
 
-    def coreference(self, document: str or [str], type_: str='default', do_segment: bool=False, translate: bool=False) -> Reshape:
+    def coreference(self, document: str or [str], kuzure: bool=False, do_segment: bool=False, translate: bool=False) -> Reshape:
 
         """
         Parameters
@@ -317,10 +326,10 @@ class API(object):
             You can choose one from the following
             * str   - sentence to be analyzed
             * [str] - sentences to be analyzed
-        type_      : str
-            You can choose one from the following (default: 'default')
-            * 'default' - normal sentence
-            * 'kuzure'  - sentence contains word lengthening often found in SNSs
+        kuzure    : bool
+            You can choose one from the following (default: False)
+            * False - default sentence
+            * True  - sentence includs word lengthening often found in SNSs
         do_segment : bool
             You can choose whether to segment the sentences (default: False)
             * True  - if the type of 'document' is 'string', the document will be segmented.
@@ -341,9 +350,9 @@ class API(object):
         >>> import cotohappy
         >>> coy = cotohappy()
         >>> document   = '太郎は友人です。彼は焼き肉を食べた。'
-        >>> type_      = 'default'
+        >>> kuzure     = False
         >>> do_segment = True
-        >>> coreference = coy.coreference(document, type_, do_segment)
+        >>> coreference = coy.coreference(document, kuzure, do_segment)
         >>> for content in coreference.coreference:
         ...     content
         ...     # representative_id
@@ -355,17 +364,20 @@ class API(object):
         彼   1,1,0,0
         """
 
+        if translate is None:
+            translate = self.translate
+
         partial_url = 'nlp/v1/coreference'
         body = {
             'document'  : document,
-            'type_'      : self.__attributed_type(type_),
+            'type'      : self.__attributed_type(kuzure),
             'do_segment': do_segment
         }
 
         return Reshape('coreference', self.__get_result(partial_url, body), translate)
 
 
-    def keyword(self, document: str or [str], type_: str, do_segment: bool=False, max_keyword_num: int=5, dic_type: str or [str]=None, translate: bool=False) -> [Reshape]:
+    def keyword(self, document: str or [str], kuzure: bool=False, do_segment: bool=False, max_keyword_num: int=5, dic_type: str or [str]=None, translate: bool=False) -> [Reshape]:
 
         """
         Parameters
@@ -374,10 +386,10 @@ class API(object):
             You can choose one from the following
             * str   - sentence to be analyzed
             * [str] - sentences to be analyzed
-        type_           : str
-            You can choose one from the following (default: 'default')
-            * 'default' - normal sentence
-            * 'kuzure' - sentence contains word lengthening often found in SNSs
+        kuzure          : bool
+            You can choose one from the following (default: False)
+            * False - default sentence
+            * True  - sentence includs word lengthening often found in SNSs
         do_segment      : bool
             You can choose whether to segment the sentences (default: False)
             * True  - if the type of 'document' is 'string', the document will be segmented.
@@ -413,10 +425,10 @@ class API(object):
         >>> import cotohappy
         >>> coy = cotohappy()
         >>> document        = 'レストランで昼食を食べた。'
-        >>> type_           = 'default'
+        >>> kuzure          = False
         >>> do_segment      = True
         >>> max_keyword_num = 2
-        >>> keyword_li = coy.keyword(document, type_, do_segment, max_keyword_num)
+        >>> keyword_li = coy.keyword(document, kuzure, do_segment, max_keyword_num)
         >>> for keyword in keyword_li:
         ...     keyword
         ...     # form   score
@@ -424,10 +436,13 @@ class API(object):
         レストラン   9.42937
         """
 
+        if translate is None:
+            translate = self.translate
+
         partial_url = 'nlp/v1/keyword'
         body = {
             'document'       : document,
-            'type'           : self.__attributed_type(type_),
+            'type'           : self.__attributed_type(kuzure),
             'do_segment'     : do_segment,
             'max_keyword_num': max_keyword_num
         }
@@ -442,7 +457,7 @@ class API(object):
         ]
 
 
-    def similarity(self, s1: str, s2: str, type_: str, dic_type: str or [str]=None, translate: bool=False) -> Reshape:
+    def similarity(self, s1: str, s2: str, kuzure: bool=False, dic_type: str or [str]=None, translate: bool=False) -> Reshape:
 
         """
         Parameters
@@ -451,10 +466,10 @@ class API(object):
             Sentence to be calculated for similarity
         s2        : str
             Sentence to be calculated for similarity
-        type_     : str
-            You can choose one from the following (default: 'default')
-            * 'default' - default sentence
-            * 'kuzure'  - sentence contains word lengthening often found in SNSs
+        kuzure    : bool
+            You can choose one from the following (default: False)
+            * False - default sentence
+            * True  - sentence includs word lengthening often found in SNSs
         dic_type  : str or [str]
             Specify technical term dictionaries. Choose from ther below.(only for Enterprise user) That's too bad. I'm an university student. I want for academic.
             * 'IT'           - Computer,information,communication
@@ -486,17 +501,20 @@ class API(object):
         >>> coy = cotohappy()
         >>> s1     = '近くのレストランはどこですか？'
         >>> s2     = 'このあたりの定食屋はどこにありますか？'
-        >>> type_  = 'default'
-        >>> similarity = coy.similarity(s1, s2, type_)
+        >>> kuzure = False
+        >>> similarity = coy.similarity(s1, s2, kuzure)
         >>> similarity  # score
         0.88565135
         """
+
+        if translate is None:
+            translate = self.translate
 
         partial_url = 'nlp/v1/similarity'
         body = {
             's1'  : s1,
             's2'  : s2,
-            'type': self.__attributed_type(type_)
+            'type': self.__attributed_type(kuzure)
         }
         if dic_type is not None:
             body['dic_type'] = self.__attributed_dic_type(dic_type)
@@ -504,17 +522,17 @@ class API(object):
         return Reshape('similarity', self.__get_result(partial_url, body), translate)
 
 
-    def sentence_type(self, sentence: str, type_: str, translate: bool=False) -> Reshape:
+    def sentence_type(self, sentence: str, kuzure: bool=False, translate: bool=False) -> Reshape:
 
         """
         Parameters
         ----------
         sentence : str
             Sentence to be analyzed
-        type_    : str
-            You can choose one from the following (default: 'default')
-            * 'default' - default sentence
-            * 'kuzure'  - sentence includs word lengthening often found in SNSs
+        kuzure   : bool
+            You can choose one from the following (default: False)
+            * False - default sentence
+            * True  - sentence includs word lengthening often found in SNSs
 
 
         See Also
@@ -530,15 +548,18 @@ class API(object):
         >>> import cotohappy
         >>> coy = cotohappy()
         >>> sentence = 'あなたの名前は何ですか？'
-        >>> type_    = 'default'
-        >>> coy.sentence_type(sentence, type_)  # modality   dialog_act[:5]'
+        >>> kuzure   = False
+        >>> coy.sentence_type(sentence, kuzure)  # modality   dialog_act[:5]'
         interrogative    information-seeking,*,*,*,*
         """
+
+        if translate is None:
+            translate = self.translate
 
         partial_url = 'nlp/v1/sentence_type'
         body = {
             'sentence': sentence,
-            'type'    : self.__attributed_type(type_)
+            'type'    : self.__attributed_type(kuzure)
         }
 
         return Reshape('sentence_type', self.__get_result(partial_url, body), translate)
@@ -576,6 +597,9 @@ class API(object):
         謳歌     喜ぶ,安心,*,*,*
         """
 
+        if translate is None:
+            translate = self.translate
+
         partial_url = 'nlp/v1/sentiment'
         body = {
             'sentence': sentence
@@ -585,7 +609,7 @@ class API(object):
 
 
     @__beta
-    def user_attribute(self, document: str or [str], type_: str='default', do_segment: bool=False, translate: bool=False) -> Reshape:
+    def user_attribute(self, document: str or [str], kuzure: bool=False, do_segment: bool=False, translate: bool=False) -> Reshape:
 
         """
         Parameters
@@ -594,10 +618,10 @@ class API(object):
             You can choose from the following
             * str   - sentence to be analyzed
             * [str] - sentences to be analyzed
-        type_      : str
-            You can choose one from the following (default: 'default')
-            * 'default' - default sentence
-            * 'kuzure'  - sentence contains word lengthening often found in SNSs
+        kuzure     : bool
+            You can choose one from the following (default: False)
+            * False - default sentence
+            * True  - sentence includs word lengthening often found in SNSs
         do_segment : bool
             You can choose whether to segment the sentences (default: False)
             * True  - if the type of 'document' is 'string', the document will be segmented.
@@ -619,15 +643,18 @@ class API(object):
         >>> import cotohappy
         >>> coy = cotohappy()
         >>> document = '私は昨日田町駅で飲みに行ったら奥さんに怒られた。'
-        >>> type_    = 'default'
-        >>> coy.user_attribute(document, type_) # age,civilstatus,earnings,gender,kind_of_bussiness,kind_of_occupation,location,position,habit[:2],hobby[:5],moving[:5]
+        >>> kuzure   = False
+        >>> coy.user_attribute(document, kuzure) # age,civilstatus,earnings,gender,kind_of_bussiness,kind_of_occupation,location,position,habit[:2],hobby[:5],moving[:5]
         60歳以上,既婚,*,*,*,*,*,*,*,*,*,ANIMAL,CAMERA,COOKING,FISHING,FORTUNE,*,*
         """
+
+        if translate is None:
+            translate = self.translate
 
         partial_url = 'nlp/beta/user_attribute'
         body = {
             'document'  : document,
-            'type'      : type_,
+            'type'      : self.__attributed_type(kuzure),
             'do_segment': do_segment
         }
 
@@ -673,6 +700,9 @@ class API(object):
         すみません、ちょっと、急用が入ってしまって。     すみません、急用が入ってしまって。
         """
 
+        if translate is None:
+            translate = self.translate
+
         partial_url = 'nlp/beta/remove_filler'
         body = {
             'text'      : text,
@@ -717,6 +747,9 @@ class API(object):
         ...     # form   begin_pos,end_pos,detect_score,correct_score[:5]
         温泉     0,2,0.9999968696704667,音声,厭戦,怨念,おんねん,モンセン
         """
+
+        if translate is None:
+            translate = self.translate
 
         partial_url = 'nlp/beta/detect_misrecognition'
         body = {

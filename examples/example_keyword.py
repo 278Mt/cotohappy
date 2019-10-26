@@ -16,10 +16,10 @@ if __name__ == '__main__':
     coy = cotohappy.API()
 
     document        = 'レストランで昼食を食べた。'
-    type_           = 'default'
+    kuzure          = False
     do_segment      = True
     max_keyword_num = 2
-    keyword_li = coy.keyword(document, type_, do_segment, max_keyword_num)
+    keyword_li = coy.keyword(document, kuzure, do_segment, max_keyword_num)
     for keyword in keyword_li:
         print(keyword)
 

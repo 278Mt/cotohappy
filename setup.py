@@ -11,7 +11,7 @@ setup(
     name='cotohappy',
     packages=['cotohappy'],
 
-    version='0.3.7',
+    version='0.4.0',
 
     license='MIT',
 

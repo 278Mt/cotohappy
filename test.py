@@ -40,11 +40,11 @@ class CotohapPyAPITests(unittest.TestCase):
         coy = cotohappy.API()
 
         sentence = '犬は歩く。'
-        type_    = 'default'
-        parse_li = coy.parse(sentence, type_)
+        kuzure   = False
+        parse_li = coy.parse(sentence, kuzure)
 
-        self.assertEqual('犬は\t 0,1,D,0,1', str(parse_li[0]))
-        self.assertEqual('歩く。\t 1,-1,O,0,1', str(parse_li[1]))
+        self.assertEqual('犬は\t 0,1,D,0,1,*,*,*,*,*', str(parse_li[0]))
+        self.assertEqual('歩く。\t 1,-1,O,0,1,*,*,*,*,*', str(parse_li[1]))
         self.assertEqual('は\t 1,ハ,は,連用助詞,*,*,*,*,*', str(parse_li[0].tokens[1]))
         self.assertEqual('歩\t 2,アル,歩く,動詞語幹,K,*,*,*,*', str(parse_li[1].tokens[0]))
 
@@ -55,8 +55,8 @@ class CotohapPyAPITests(unittest.TestCase):
         coy = cotohappy.API()
 
         sentence = '昨日は東京駅を利用した。'
-        type_    = 'default'
-        ne_li = coy.ne(sentence, type_)
+        kuzure   = False
+        ne_li = coy.ne(sentence, kuzure)
 
         self.assertEqual('昨日\t 0,2,昨日,DAT,,*,basic', str(ne_li[0]))
         self.assertEqual('東京駅\t 3,6,東京駅,LOC,,*,basic', str(ne_li[1]))
@@ -68,9 +68,9 @@ class CotohapPyAPITests(unittest.TestCase):
         coy = cotohappy.API()
 
         document   = '太郎は友人です。彼は焼き肉を食べた。'
-        type_      = 'default'
+        kuzure     = False
         do_segment = True
-        coreference = coy.coreference(document, type_, do_segment)
+        coreference = coy.coreference(document, kuzure, do_segment)
 
         self.assertEqual('0', str(coreference.coreference[0]))
         self.assertEqual('彼\t 1,1,0,0', str(coreference.coreference[0].referents[1]))
@@ -82,10 +82,10 @@ class CotohapPyAPITests(unittest.TestCase):
         coy = cotohappy.API()
 
         document        = 'レストランで昼食を食べた。'
-        type_           = 'default'
+        kuzure          = False
         do_segment      = True
         max_keyword_num = 2
-        keyword_li = coy.keyword(document, type_, do_segment, max_keyword_num)
+        keyword_li = coy.keyword(document, kuzure, do_segment, max_keyword_num)
 
         self.assertEqual('昼食\t 12.1121', str(keyword_li[0]))
         self.assertEqual('レストラン\t 9.42937', str(keyword_li[1]))
@@ -96,10 +96,10 @@ class CotohapPyAPITests(unittest.TestCase):
 
         coy = cotohappy.API()
 
-        s1    = '近くのレストランはどこですか？'
-        s2    = 'このあたりの定食屋はどこにありますか？'
-        type_ = 'default'
-        similarity = coy.similarity(s1, s2, type_)
+        s1     = '近くのレストランはどこですか？'
+        s2     = 'このあたりの定食屋はどこにありますか？'
+        kuzure = False
+        similarity = coy.similarity(s1, s2, kuzure)
 
         self.assertEqual('0.88565135', str(similarity))
 
@@ -110,8 +110,8 @@ class CotohapPyAPITests(unittest.TestCase):
         coy = cotohappy.API()
 
         sentence = 'あなたの名前は何ですか？'
-        type_    = 'default'
-        sentence_type = coy.sentence_type(sentence, type_)
+        kuzure   = False
+        sentence_type = coy.sentence_type(sentence, kuzure)
 
         self.assertEqual('interrogative\t information-seeking,*,*,*,*', str(sentence_type))
 
@@ -133,8 +133,8 @@ class CotohapPyAPITests(unittest.TestCase):
         coy = cotohappy.API()
 
         document = '私は昨日田町駅で飲みに行ったら奥さんに怒られた。'
-        type_    = 'default'
-        user_attribute = coy.user_attribute(document, type_)
+        kuzure   = False
+        user_attribute = coy.user_attribute(document, kuzure)
 
         self.assertEqual('60歳以上,既婚,*,*,*,*,*,*,*,*,*,ANIMAL,CAMERA,COOKING,FISHING,FORTUNE,*,*', str(user_attribute))
 

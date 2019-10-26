@@ -16,7 +16,7 @@ if __name__ == '__main__':
     coy = cotohappy.API()
 
     document = '私は昨日田町駅で飲みに行ったら奥さんに怒られた。'
-    type_    = 'default'
-    user_attribute = coy.user_attribute(document, type_)
+    kuzure   = False
+    user_attribute = coy.user_attribute(document, kuzure)
     print(user_attribute)
 

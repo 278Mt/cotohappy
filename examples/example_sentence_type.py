@@ -16,7 +16,7 @@ if __name__ == '__main__':
     coy = cotohappy.API()
 
     sentence = 'あなたの名前は何ですか？'
-    type_    = 'default'
-    sentence_type = coy.sentence_type(sentence, type_)
+    kuzure   = False
+    sentence_type = coy.sentence_type(sentence, kuzure)
     print(sentence_type)
 

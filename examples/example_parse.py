@@ -17,8 +17,8 @@ if __name__ == '__main__':
 
     print('\n#### parse origin ####')
     sentence = '犬は歩く。'
-    type_    = 'default'
-    parse_li = coy.parse(sentence, type_)
+    kuzure   = False
+    parse_li = coy.parse(sentence, kuzure)
     for parse in parse_li:
         print(parse)
     print('\n#### parse tokens ####')

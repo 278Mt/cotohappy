@@ -16,8 +16,8 @@ if __name__ == '__main__':
     coy = cotohappy.API()
 
     sentence = '昨日は東京駅を利用した。'
-    type_    = 'default'
-    ne_li = coy.ne(sentence, type_)
+    kuzure   = False
+    ne_li = coy.ne(sentence, kuzure)
     for ne in ne_li:
         print(ne)
 

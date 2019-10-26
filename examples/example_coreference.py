@@ -16,9 +16,9 @@ if __name__ == '__main__':
     coy = cotohappy.API()
 
     document   = '太郎は友人です。彼は焼き肉を食べた。'
-    type_      = 'default'
+    kuzure     = False
     do_segment = True
-    coreference = coy.coreference(document, type_, do_segment)
+    coreference = coy.coreference(document, kuzure, do_segment)
 
     print('\n#### coreference reference ####')
     for content in coreference.coreference:

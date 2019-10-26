@@ -81,8 +81,8 @@ if __name__ == '__main__':
     """ getting parse """
     print('\n#### parse origin ####')
     sentence = get_kotonoha_story()
-    type_    = 'default'
-    parse_li = coy.parse(sentence, type_)
+    kuzure   = False
+    parse_li = coy.parse(sentence, kuzure)
     for parse in parse_li:
         print(parse)
 
@@ -147,6 +147,10 @@ Please check details on [examples](https://github.com/278Mt/cotohappy/tree/maste
 
 Whats's new?
 ------------
+
+### 0.4.0
+
+`kuzure` and `default` become `kuzure=True` and `kuzure=False` 
 
 ### 0.3.6, 0.3.7
 

@@ -136,7 +136,7 @@ class API(object):
             response = req.json()
 
             if response['status'] > 0:
-                raise CotohapPyError(response['message'])
+                raise CotohapPyError(f'{response["mode"]} <status: {response["status"]}>')
 
         return response['result']
 
@@ -168,18 +168,18 @@ class API(object):
         return dic_type
 
 
-    def parse(self, sentence: str, type_: str='default', dic_type: str or [str]=None) -> [Reshape]:
+    def parse(self, sentence: str, type_: str='default', dic_type: str or [str]=None, translate: bool=False) -> [Reshape]:
 
         """
         Parameters
         ----------
-        sentence : str
+        sentence  : str
             sentence to be analyzed
-        type_    : str
+        type_     : str
             You can choose one from the following (default: 'default')
             * 'default' - normal sentence
             * 'kuzure'  - Sentence contains 'word lengthening' often found in SNSs
-        dic_type : str or [str]
+        dic_type  : str or [str]
             Specify technical term dictionaries. Choose from ther below.(only for Enterprise user) That's too bad. I'm an university student. I want for academic.
             * 'IT'           - Computer,information,communication
             * 'automobile'   - Automobile
@@ -192,6 +192,8 @@ class API(object):
             * 'machinery'    - Machinery
             * 'medical'      - Medical
             * 'metal'        - Metal
+        translate : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -236,23 +238,23 @@ class API(object):
         parse_li = self.__get_result(partial_url, body)
 
         return [
-            Reshape('parse', parse)
+            Reshape('parse', parse, translate)
             for parse in parse_li
         ]
 
 
-    def ne(self, sentence: str, type_: str='default', dic_type: str or [str]=None) -> [Reshape]:
+    def ne(self, sentence: str, type_: str='default', dic_type: str or [str]=None, translate: bool=False) -> [Reshape]:
 
         """
         Parameters
         ----------
-        sentence : str
+        sentence  : str
             Sentence to be analyzed
-        type_    : str
+        type_     : str
             You can choose one from the following (default: 'default')
             * 'default' - Normal sentence
             * 'kuzure'  - sentence contains word lengthening often found in SNSs
-        dic_type : str or [str]
+        dic_type  : str or [str]
             Specify technical term dictionaries. Choose from ther below.(only for Enterprise user) That's too bad. I'm an university student. I want for academic.
             * 'IT'           - Computer,information,communication
             * 'automobile'   - Automobile
@@ -265,6 +267,8 @@ class API(object):
             * 'machinery'    - Machinery
             * 'medical'      - Medical
             * 'metal'        - Metal
+        translate : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -299,12 +303,12 @@ class API(object):
         ne_li = self.__get_result(partial_url, body)
 
         return [
-            Reshape('ne', ne)
+            Reshape('ne', ne, translate)
             for ne in ne_li
         ]
 
 
-    def coreference(self, document: str or [str], type_: str='default', do_segment: bool=False) -> Reshape:
+    def coreference(self, document: str or [str], type_: str='default', do_segment: bool=False, translate: bool=False) -> Reshape:
 
         """
         Parameters
@@ -321,6 +325,8 @@ class API(object):
             You can choose whether to segment the sentences (default: False)
             * True  - if the type of 'document' is 'string', the document will be segmented.
             * False - the document will not be segmented. #if the type of 'document' is 'array (string)', do_segment will be ignored.
+        translate  : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -356,10 +362,10 @@ class API(object):
             'do_segment': do_segment
         }
 
-        return Reshape('coreference', self.__get_result(partial_url, body))
+        return Reshape('coreference', self.__get_result(partial_url, body), translate)
 
 
-    def keyword(self, document: str or [str], type_: str, do_segment: bool=False, max_keyword_num: int=5, dic_type: str or [str]=None) -> [Reshape]:
+    def keyword(self, document: str or [str], type_: str, do_segment: bool=False, max_keyword_num: int=5, dic_type: str or [str]=None, translate: bool=False) -> [Reshape]:
 
         """
         Parameters
@@ -391,6 +397,8 @@ class API(object):
             * 'machinery'    - Machinery
             * 'medical'      - Medical
             * 'metal'        - Metal
+        translate       : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -429,25 +437,25 @@ class API(object):
         keyword_li = self.__get_result(partial_url, body)
 
         return [
-            Reshape('keyword', keyword)
+            Reshape('keyword', keyword, translate)
             for keyword in keyword_li
         ]
 
 
-    def similarity(self, s1: str, s2: str, type_: str, dic_type: str or [str]=None) -> Reshape:
+    def similarity(self, s1: str, s2: str, type_: str, dic_type: str or [str]=None, translate: bool=False) -> Reshape:
 
         """
         Parameters
         ----------
-        s1       : str
+        s1        : str
             Sentence to be calculated for similarity
-        s2       : str
+        s2        : str
             Sentence to be calculated for similarity
-        type_    : str
+        type_     : str
             You can choose one from the following (default: 'default')
             * 'default' - default sentence
             * 'kuzure'  - sentence contains word lengthening often found in SNSs
-        dic_type : str or [str]
+        dic_type  : str or [str]
             Specify technical term dictionaries. Choose from ther below.(only for Enterprise user) That's too bad. I'm an university student. I want for academic.
             * 'IT'           - Computer,information,communication
             * 'automobile'   - Automobile
@@ -460,6 +468,8 @@ class API(object):
             * 'machinery'    - Machinery
             * 'medical'      - Medical
             * 'metal'        - Metal
+        translate : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -491,10 +501,10 @@ class API(object):
         if dic_type is not None:
             body['dic_type'] = self.__attributed_dic_type(dic_type)
 
-        return Reshape('similarity', self.__get_result(partial_url, body))
+        return Reshape('similarity', self.__get_result(partial_url, body), translate)
 
 
-    def sentence_type(self, sentence: str, type_: str) -> Reshape:
+    def sentence_type(self, sentence: str, type_: str, translate: bool=False) -> Reshape:
 
         """
         Parameters
@@ -531,16 +541,18 @@ class API(object):
             'type'    : self.__attributed_type(type_)
         }
 
-        return Reshape('sentence_type', self.__get_result(partial_url, body))
+        return Reshape('sentence_type', self.__get_result(partial_url, body), translate)
 
 
-    def sentiment(self, sentence: str) -> Reshape:
+    def sentiment(self, sentence: str, translate: bool=False) -> Reshape:
 
         """
         Parameters
         ----------
-        sentence : str
+        sentence  : str
             Sentence to be analyzed
+        translate : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -569,11 +581,11 @@ class API(object):
             'sentence': sentence
         }
 
-        return Reshape('sentiment', self.__get_result(partial_url, body))
+        return Reshape('sentiment', self.__get_result(partial_url, body), translate)
 
 
     @__beta
-    def user_attribute(self, document: str or [str], type_: str='default', do_segment: bool=False) -> Reshape:
+    def user_attribute(self, document: str or [str], type_: str='default', do_segment: bool=False, translate: bool=False) -> Reshape:
 
         """
         Parameters
@@ -590,6 +602,8 @@ class API(object):
             You can choose whether to segment the sentences (default: False)
             * True  - if the type of 'document' is 'string', the document will be segmented.
             * False - the document will not be segmented. #if the type of 'document' is 'array (string)', do_segment will be ignored.
+        translate  : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -617,22 +631,24 @@ class API(object):
             'do_segment': do_segment
         }
 
-        return Reshape('user_attribute', self.__get_result(partial_url, body))
+        return Reshape('user_attribute', self.__get_result(partial_url, body), translate)
 
 
     @__beta
-    def remove_filler(self, text: str, do_segment: bool=False) -> [Reshape]:
+    def remove_filler(self, text: str, do_segment: bool=False, translate: bool=False) -> [Reshape]:
 
         """
         Parameters
         ----------
-        text : str
+        text       : str
             Text to be analyzed
         do_segment : bool
             Specify whether to delimit or not to delimit the sentence.
             Specify true when analyzing text that does not include punctuation marks. (default: False) 
             * True  – delimit the sentence
             * False - not delimit the sentence
+        translate  : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -665,19 +681,21 @@ class API(object):
 
         remove_filler_li = self.__get_result(partial_url, body)
         return [
-            Reshape('remove_filler', remove_filler)
+            Reshape('remove_filler', remove_filler, translate)
             for remove_filler in remove_filler_li
         ]
 
 
     @__beta
-    def detect_misrecognition(self, sentence: str) -> Reshape:
+    def detect_misrecognition(self, sentence: str, translate: bool=False) -> Reshape:
 
         """
         Parameters
         ----------
-        sentence : str
+        sentence  : str
             Text to be analyzed
+        translate : bool
+            translating result readablly for Japanese
 
         See Also
         --------
@@ -705,5 +723,5 @@ class API(object):
             'sentence': sentence
         }
 
-        return Reshape('detect_misrecognition', self.__get_result(partial_url, body))
+        return Reshape('detect_misrecognition', self.__get_result(partial_url, body), translate)
 

@@ -8,12 +8,14 @@ COTOHA API for Python3.8
 @id: 278mt
 """
 
+from cotohappy.translate import Translate
 
 class Reshape(object):
 
-    def __init__(self, mode: str, data: dict or list):
+    def __init__(self, mode: str, data: dict or list, translate: bool=False):
 
         self.data = data
+        tl = Translate()
 
         if mode == 'parse':
             chunk_info = data['chunk_info']
@@ -23,15 +25,20 @@ class Reshape(object):
             self.chunk_head = chunk_info['chunk_head']
             self.chunk_func = chunk_info['chunk_func']
             self.links      = [
-                Reshape(mode='links', data=link)
+                Reshape('links', link, translate)
                 for link in chunk_info['links']
             ]
             self.predicate  = chunk_info['predicate'] if 'predicate' in chunk_info else []
 
             self.tokens     = [
-                Reshape(mode='tokens', data=token)
+                Reshape('tokens', token, translate)
                 for token in data['tokens']
             ]
+
+            # translate
+            if translate:
+                self.dep       = tl.dep_list(self.dep)
+                self.predicate = [part for part in self.predicate]
 
             len_predicate = len(self.predicate)
 
@@ -51,6 +58,10 @@ class Reshape(object):
             self.link  = data['link']
             self.label = data['label']
 
+            # translate
+            if translate():
+                self.label = tl.semantic_role_label_list(self.label)
+
             self.key_name   = 'link,label'
             self.result_str = '{},{}'.format(
                 self.link,
@@ -65,10 +76,15 @@ class Reshape(object):
             self.pos               = data['pos']
             self.features          = data['features']
             self.dependency_labels = [
-                Reshape(mode='dependency_labels', data=dependency_label)
+                Reshape('dependency_labels', dependency_label, translate)
                 for dependency_label in data['dependency_labels']
             ] if 'dependency_labels' in data else []
             self.attribute         = data['attribute'] if 'attribute' in data else '*'
+
+            # translate
+            if translate:
+                self.pos      = tl.speech_parts_list(self.pos)
+                self.features = [tl.features_list(feature) for feature in self.features]
 
             len_features = len(self.features)
 
@@ -102,6 +118,11 @@ class Reshape(object):
             self.info           = data['info'] if 'info' in data else '*'
             self.source         = data['source']
 
+            # translate
+            if translate:
+                self.class_ = self.ne_class_list(self.class_)
+                self.extended_class = self.extended_ne_class_list(self.extended_class)
+
             self.key_name   = 'form\t begin_pos,end_pos,std_form,class,extended_class,info,source'
             self.result_str = '{}\t {},{},{},{},{},{},{}'.format(
                 self.form,
@@ -116,7 +137,7 @@ class Reshape(object):
 
         elif mode == 'coreference':
             self.coreference = [
-                Reshape(mode='content', data=content)
+                Reshape('content', content, translate)
                 for content in data['coreference']
             ]
             self.tokens      = data['tokens']
@@ -128,7 +149,7 @@ class Reshape(object):
         elif mode == 'content':
             self.representative_id = data['representative_id']
             self.referents         = [
-                Reshape(mode='referents', data=referent)
+                Reshape('referents', referent, translate)
                 for referent in data['referents']
             ]
 
@@ -175,6 +196,10 @@ class Reshape(object):
             self.modality   = data['modality']
             self.dialog_act = data['dialog_act']
 
+            # translate
+            if translate:
+                self.dialog_act = [tl.speech_act_list(part) for part in self.dialog_act]
+
             len_dialog_act = len(self.dialog_act)
 
             self.key_name   = 'modality\t dialog_act[:5]'
@@ -187,7 +212,7 @@ class Reshape(object):
             self.sentiment        = data['sentiment']
             self.score            = data['score']
             self.emotional_phrase = [
-                Reshape(mode='emotional_phrase', data=content)
+                Reshape('emotional_phrase', content, translate)
                 for content in data['emotional_phrase']
             ]
 
@@ -245,7 +270,7 @@ class Reshape(object):
 
         elif mode == 'remove_filler':
             self.fillers             = [
-                Reshape('filler', filler)
+                Reshape('filler', filler, translate)
                 for filler in data['fillers']
             ]
             self.normalized_sentence = data['normalized_sentence']
@@ -272,7 +297,7 @@ class Reshape(object):
 
         elif mode == 'detect_misrecognition':
             self.candidates = [
-                Reshape('candidate', candidate)
+                Reshape('candidate', candidate, translate)
                 for candidate in data['candidates']
             ]
             self.score      = data['score']
@@ -288,7 +313,7 @@ class Reshape(object):
             self.end_pos      = data['end_pos']
             self.detect_score = data['detect_score']
             self.correction   = [
-                Reshape('correction', content)
+                Reshape('correction', content, translate)
                 for content in data['correction']
             ]
 

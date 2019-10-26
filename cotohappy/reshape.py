@@ -59,7 +59,7 @@ class Reshape(object):
             self.label = data['label']
 
             # translate
-            if translate():
+            if translate:
                 self.label = tl.semantic_role_label_list(self.label)
 
             self.key_name   = 'link,label'

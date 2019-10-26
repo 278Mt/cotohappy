@@ -148,7 +148,7 @@ Please check details on [examples](https://github.com/278Mt/cotohappy/tree/maste
 Whats's new?
 ------------
 
-### 0.3.6
+### 0.3.6, 0.3.7
 
 Partial errors elimination.
 

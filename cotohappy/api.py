@@ -73,6 +73,8 @@ class API(object):
         self.__get_access_token()
         self.api_base_url = self.payload['APIBaseURL']
 
+        self.translate = translate
+
 
     def __beta(fn):
 

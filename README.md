@@ -148,6 +148,10 @@ Please check details on [examples](https://github.com/278Mt/cotohappy/tree/maste
 Whats's new?
 ------------
 
+### 0.4.1
+
+Partial errors elimination.
+
 ### 0.4.0
 
 `kuzure` and `default` become `kuzure=True` and `kuzure=False` 

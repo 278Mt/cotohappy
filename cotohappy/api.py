@@ -141,7 +141,7 @@ class API(object):
             response = req.json()
 
             if response['status'] > 0:
-                raise CotohapPyError(f'{response["mode"]} <status: {response["status"]}>')
+                raise CotohapPyError(f'{response["message"]} <status: {response["status"]}>')
 
         return response['result']
 
